@@ -1,0 +1,19 @@
+{
+  "name": "video-chat-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbadriR/videoChatApp.git"
+  },
+  "author": "Albadri Rami",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlbadriR/videoChatApp/issues"
+  },
+  "homepage": "https://github.com/AlbadriR/videoChatApp#readme"
+}
