@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/AlbadriR/videoChatApp/issues"
   },
-  "homepage": "https://github.com/AlbadriR/videoChatApp#readme"
+  "homepage": "https://github.com/AlbadriR/videoChatApp#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.4"
+  }
 }
