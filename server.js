@@ -2,15 +2,8 @@ require("dotenv").config();
 const path = require("path");
 const app = require("express")();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    transports: ["websocket", "polling"],
-    credentials: true,
-  },
-  allowEIO3: true, // allowEIO3 is set to true to communicate with socket.io-client v2
-});
+const socket = require("socket.io");
+const io = socket(server);
 const port = process.env.PORT || 3001;
 
 io.on("connection", (socket) => {
@@ -59,7 +52,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`${socket.id} disconnect`);
   });
-  if (process.env.PROD) {
+  if (process.env.PROD || process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "./client/build")));
     app.get("*", (req, res) => {
       res.sendFile(path.join(__dirname, "./client/build/index.html"));
