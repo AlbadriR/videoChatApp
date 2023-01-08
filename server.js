@@ -1,3 +1,4 @@
+require("dotenv").config();
 const cors = require("cors");
 const app = require("express")();
 const server = require("http").createServer(app);
@@ -10,7 +11,7 @@ const io = require("socket.io")(server, {
   },
   allowEIO3: true, // allowEIO3 is set to true to communicate with socket.io-client v2
 });
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
@@ -58,6 +59,12 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`${socket.id} disconnect`);
   });
+  if (process.env.PROD) {
+    app.use(express.static(path.join(__dirname, "./client/build")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    });
+  }
 });
 app.use((err, res) => {
   console.error(err.stack);
