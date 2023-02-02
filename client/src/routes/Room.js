@@ -18,7 +18,7 @@ const Room = (props) => {
         userVideo.current.srcObject = stream;
         userStream.current = stream;
         // We connect to the socket.io server
-        socketRef.current = io.connect("https://10.5.51.38:3001/", {
+        socketRef.current = io.connect("https://192.168.1.7:3001/", {
           secure: false,
         });
         // We send the roomID to the server
@@ -51,6 +51,7 @@ const Room = (props) => {
     userStream.current
       .getTracks()
       .forEach((track) => peerRef.current.addTrack(track, userStream.current));
+    console.log("callUser");
   }
   // userID represents the ID of the user trying to call us
   function createPeer(userID) {
@@ -69,6 +70,8 @@ const Room = (props) => {
         },
       ],
     });
+
+    console.log("createPeer");
     // onicecandidate event is called when the peer object find a candidate to connect to the other peer
     peer.onicecandidate = (e) => {
       if (e.candidate) {
@@ -108,6 +111,7 @@ const Room = (props) => {
         socketRef.current.emit("offer", payload);
       })
       .catch((e) => console.log(e));
+    console.log("handleNegotiationNeededEvent");
   }
 
   function handleRecieveCall(inComingPayload) {
@@ -144,6 +148,7 @@ const Room = (props) => {
   }
 
   function handleAnswer(message) {
+    console.log("handleAnswer");
     const desc = new RTCSessionDescription(message.sdp);
     // we set the description of the other user peer object with the answer we received from him
     peerRef.current.setRemoteDescription(desc).catch((e) => console.log(e));

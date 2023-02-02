@@ -3,8 +3,7 @@ const app = express();
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
-app.use(express.json());
-app.use(cors({ origin: "https://10.5.51.38:3000" }));
+
 const options = {
   key: fs.readFileSync("./ns1.name.com.key"),
   cert: fs.readFileSync("./debate_crt.crt"),
@@ -12,23 +11,28 @@ const options = {
 };
 const port = process.env.PROD || 3001;
 const server = require("https").createServer(options, app);
-
+// maison "192.168.1.7:3000"; //ecole  //https://10.5.51.38:3000
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://10.5.51.38:3000", //https://10.5.51.38:3000
+    origin: "https://192.168.1.7:3000", //https://10.5.51.38:3000
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
     credentials: true,
   },
   allowEIO3: true,
 });
-
-app.use(express.static(__dirname + "/build"));
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.use(express.json());
+app.use(cors({ origin: "https://192.168.1.7:3000" }));
+/*
+app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, "client")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-
+*/
+app.get("*", (req, res) => {
+  res.send("Hello World");
+});
 io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
 
