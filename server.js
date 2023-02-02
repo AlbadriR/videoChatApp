@@ -1,15 +1,33 @@
-const app = require("express")();
-const server = require("http").createServer(app);
+const express = require("express");
+const app = express();
+const fs = require("fs");
+const path = require("path");
+const cors = require("cors");
+app.use(express.json());
+app.use(cors({ origin: "https://10.5.51.38:3000" }));
+const options = {
+  key: fs.readFileSync("./ns1.name.com.key"),
+  cert: fs.readFileSync("./debate_crt.crt"),
+  ca: fs.readFileSync("./debate_ca.crt"),
+};
+const port = process.env.PROD || 3001;
+const server = require("https").createServer(options, app);
+
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://10.5.51.38:3000", //https://10.5.51.38:3000
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
     credentials: true,
   },
-  allowEIO3: true, // allowEIO3 is set to true to communicate with socket.io-client v2
+  allowEIO3: true,
 });
-const port = process.env.PROD || 3001;
+
+app.use(express.static(__dirname + "/build"));
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
