@@ -18,7 +18,7 @@ const Room = (props) => {
         userVideo.current.srcObject = stream;
         userStream.current = stream;
         // We connect to the socket.io server
-        socketRef.current = io.connect("https://192.168.1.7:3001/", {
+        socketRef.current = io.connect("https://10.5.51.38:3001", {
           secure: false,
         });
         // We send the roomID to the server
